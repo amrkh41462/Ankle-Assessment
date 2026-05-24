@@ -11,19 +11,79 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="css/styles.css">
+
+  <style>
+    /* Fix Language Toggle Overlap & Size */
+    .lang-toggle {
+      position: absolute !important;
+      top: 16px !important;
+      left: 16px !important;
+      z-index: 9999 !important;
+      min-width: 70px !important;
+      display: flex !important;
+      justify-content: center !important;
+    }
+    
+    /* Perfect Center Alignment for Logo and Title */
+    #screen-welcome .screen-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .brand-logo {
+      display: block;
+      margin: 0 auto 8px auto !important;
+    }
+    .welcome-badge {
+      display: inline-block;
+      margin: 0 auto 24px auto !important;
+    }
+
+    /* Mobile Scaling for Blanks/Option Cards */
+    .option-cards {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+    .option-card {
+      width: 100% !important;
+      max-width: 350px !important; /* Stops blanks from stretching too wide */
+      margin-bottom: 12px;
+    }
+    .option-icon {
+      font-size: 28px !important; /* Larger emojis */
+    }
+    .option-label {
+      font-size: 18px !important; /* Larger text */
+    }
+
+    /* Email Gateway Form Styles */
+    .email-form-gateway {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 24px;
+      width: 100%;
+      max-width: 350px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .email-form-gateway input {
+      padding: 14px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
 
-  <header class="app-top-header">
-    <div class="header-content">
-      <button class="lang-toggle" id="langToggle">
-        <span class="lang-toggle-icon">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-        </span> 
-        <span id="langText">EN</span>
-      </button>
-    </div>
-  </header>
+  <button class="lang-toggle" id="langToggle">
+    <span class="lang-toggle-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span> EN
+  </button>
 
   <div class="app" id="app">
 
@@ -42,10 +102,8 @@
 
       <div class="screen active" id="screen-welcome" data-step="0">
         <div class="screen-content">
-          <div class="brand-header animate-in">
-            <img src="img/logo.png" alt="Behind the Injury" class="brand-logo">
-            <div class="welcome-badge" data-i18n="welcome.badge">ANKLE ASSESSMENT</div>
-          </div>
+          <img src="img/logo.png" alt="Behind the Injury" class="brand-logo animate-in">
+          <div class="welcome-badge animate-in animate-in-delay-1" data-i18n="welcome.badge">ANKLE ASSESSMENT</div>
 
           <h1 class="welcome-title animate-in animate-in-delay-2" data-i18n="welcome.title">
             هل كاحلك... ثابت <em>فعلاً؟</em>
@@ -92,7 +150,7 @@
           <h2 class="question-text" data-i18n="sport.title">ما هي رياضتك؟</h2>
           <p class="question-subtext" data-i18n="sport.subtitle">اختر الرياضة الرئيسية التي تمارسها.</p>
 
-          <div class="option-cards proportional-cards" data-question="sport">
+          <div class="option-cards" data-question="sport">
             <button class="option-card" data-score="1">
               <div class="option-icon">⚽</div>
               <div class="option-info">
@@ -138,7 +196,7 @@
           <h2 class="question-text" data-i18n="q1.title">كم مرة التوى كاحلك؟</h2>
           <p class="question-subtext" data-i18n="q1.subtitle">اشمل أي مرة انثنى أو التفّ أو انخلع بشكل ملحوظ.</p>
 
-          <div class="option-cards proportional-cards" data-question="sprain_count">
+          <div class="option-cards" data-question="sprain_count">
             <button class="option-card" data-score="10">
               <div class="option-icon">🛡️</div>
               <div class="option-info">
@@ -181,7 +239,7 @@
           <h2 class="question-text" data-i18n="q2.title">متى كانت آخر مرة التوى أو انخلع فيها كاحلك؟</h2>
           <p class="question-subtext" data-i18n="q2.subtitle">فكّر في آخر مرة شعرت فيها بعدم ثبات كاحلك أو انثنى.</p>
 
-          <div class="option-cards proportional-cards" data-question="last_sprain">
+          <div class="option-cards" data-question="last_sprain">
             <button class="option-card" data-score="10">
               <div class="option-icon">✅</div>
               <div class="option-info">
@@ -224,7 +282,7 @@
           <h2 class="question-text" data-i18n="q3.title">كم مرة ينخلع كاحلك أو تشعر أنه قد ينثني؟</h2>
           <p class="question-subtext" data-i18n="q3.subtitle">أثناء الرياضة، المشي على أرض غير مستوية، أو الأنشطة اليومية.</p>
 
-          <div class="option-cards proportional-cards" data-question="giving_way">
+          <div class="option-cards" data-question="giving_way">
             <button class="option-card" data-score="10">
               <div class="option-icon">🛡️</div>
               <div class="option-info">
@@ -395,8 +453,8 @@
             </ol>
           </div>
 
-          <div class="option-cards proportional-cards" data-question="side_hop">
-            <button class="option-card" data-score="15">
+          <div class="option-cards" data-question="side_hop">
+            <button class="option-card" data-score="15" onclick="goToEmail()">
               <div class="option-icon">✅</div>
               <div class="option-info">
                 <div class="option-label" data-i18n="sidehop.opt1.label">مكتمل بسلاسة</div>
@@ -404,7 +462,7 @@
               </div>
               <div class="option-check"></div>
             </button>
-            <button class="option-card" data-score="10">
+            <button class="option-card" data-score="10" onclick="goToEmail()">
               <div class="option-icon">⚠️</div>
               <div class="option-info">
                 <div class="option-label" data-i18n="sidehop.opt2.label">مكتمل مع صعوبة</div>
@@ -412,7 +470,7 @@
               </div>
               <div class="option-check"></div>
             </button>
-            <button class="option-card" data-score="1">
+            <button class="option-card" data-score="1" onclick="goToEmail()">
               <div class="option-icon">🔴</div>
               <div class="option-info">
                 <div class="option-label" data-i18n="sidehop.opt3.label">غير قادر على الإكمال</div>
@@ -422,20 +480,21 @@
             </button>
           </div>
           <div style="text-align:center;margin-top:16px;">
-            <button class="btn-text" id="sidehopSkip" data-i18n="sidehop.skip">تخطي هذا الاختبار</button>
+            <button class="btn-text" id="sidehopSkip" onclick="goToEmail()" data-i18n="sidehop.skip">تخطي هذا الاختبار</button>
           </div>
         </div>
       </div>
 
       <div class="screen" id="screen-email" data-step="9">
         <div class="screen-content">
-          <div class="email-gateway-header">
+          <div class="results-header">
             <h2 data-i18n="email.title">خطوة أخيرة لرؤية نتائجك</h2>
             <p data-i18n="email.desc">أدخل بريدك الإلكتروني لفتح تقرير التقييم المخصص لك والحصول على نسخة في بريدك.</p>
           </div>
+          
           <form id="emailGatewayForm" class="email-form-gateway">
-            <input type="email" id="gatewayEmailInput" required data-i18n="email.placeholder" placeholder="أدخل بريدك الإلكتروني هنا..." aria-label="Email address">
-            <button type="submit" class="btn-primary" id="gatewaySubmitBtn" data-i18n="email.submit">أرني نتائجي</button>
+            <input type="email" id="gatewayEmailInput" required data-i18n="email.placeholder" placeholder="أدخل بريدك الإلكتروني هنا...">
+            <button type="submit" class="btn-primary" data-i18n="email.submit">أرني نتائجي</button>
           </form>
         </div>
       </div>
@@ -468,7 +527,6 @@
             <p data-i18n="results.acuteWarning.text">
               بناءً على إجاباتك، قد تكون إصابتك لا تزال في المرحلة الحادة.
               ننصح بمراجعة أخصائي طب رياضي قبل البدء بأي برنامج تأهيل.
-              التوصيات أدناه لا تزال ذات صلة لكن يجب مناقشتها مع مقدم الرعاية الصحية أولاً.
             </p>
           </div>
 
@@ -514,5 +572,39 @@
   <script src="js/charts.js"></script>
   <script src="js/app.js"></script>
 
+  <script>
+    // Intercept the navigation from the Side Hop Test to go to Email Screen
+    function goToEmail() {
+        setTimeout(function() {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('screen-email').classList.add('active');
+            window.scrollTo(0,0);
+        }, 300);
+    }
+
+    // Handle the Email Form Submission
+    document.getElementById('emailGatewayForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const emailInput = document.getElementById('gatewayEmailInput').value;
+      if(emailInput) {
+        document.getElementById('calculatingOverlay').style.display = 'flex';
+        
+        setTimeout(() => {
+          document.getElementById('calculatingOverlay').style.display = 'none';
+          document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+          document.getElementById('screen-results').classList.add('active');
+          
+          if(document.getElementById('progressFill')) {
+              document.getElementById('progressFill').style.width = '100%';
+          }
+          
+          if (typeof calculateAndRenderResults === 'function') {
+            calculateAndRenderResults();
+          }
+        }, 1500);
+      }
+    });
+  </script>
 </body>
 </html>
