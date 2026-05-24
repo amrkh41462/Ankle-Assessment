@@ -370,62 +370,46 @@
         </div>
       </div>
 
-      <div class="screen" id="screen-decel" data-step="8">
-        <div class="screen-content">
-          <div class="phase-label" data-i18n="decel.label">المرحلة ٢ — قدرة التباطؤ</div>
-          <h2 class="question-text" data-i18n="decel.title">اختبار الهبوط والتباطؤ</h2>
-          <p class="test-purpose" data-i18n="decel.purpose">اختبار التحميل اللامركزي وامتصاص قوة الكبح.</p>
+     <div class="screen" id="screen-sidehop" data-step="8">
+  <div class="screen-content">
+    <div class="phase-label" data-i18n="sidehop.label">المرحلة ٢ — قدرة التباطؤ والانفجارية</div>
+    <h2 class="question-text" data-i18n="sidehop.title">اختبار القفز الجانبي (Side Hop Test)</h2>
+    <p class="test-purpose" data-i18n="sidehop.purpose">تقييم القوة الانفجارية، الاستقرار الجانبي، والتحكم العصبي العضلي.</p>
 
-          <div class="test-instructions">
-            <h4 data-i18n="decel.instructions.title">التعليمات</h4>
-            <ol>
-              <li data-i18n="decel.step1">ابحث عن درجة أو سطح مرتفع (١٠–٢٠ سم)</li>
-              <li data-i18n="decel.step2">قف على الحافة بقدمك المصابة</li>
-              <li data-i18n="decel.step3">انزل للأمام، واهبط على قدمك المصابة فقط</li>
-              <li data-i18n="decel.step4">حاول تثبيت الهبوط — امتص الصدمة وثبّت لمدة ٣ ثوانٍ</li>
-              <li data-i18n="decel.step5">قيّم تجربتك بصدق أدناه</li>
-            </ol>
-          </div>
+    <div class="test-instructions">
+      <h4>التعليمات</h4>
+      <ol>
+        <li>قف على رجلك المصابة.</li>
+        <li>اقفز جانبياً ذهاباً وإياباً عبر خط مساحته ٣٠ سم.</li>
+        <li>قم بذلك بأسرع وأكثر أمان ممكن لـ ١٠ تكرارات.</li>
+      </ol>
+    </div>
 
-          <div class="option-cards" data-question="decel_drop">
-            <button class="option-card" data-score="15">
-              <div class="option-icon">✅</div>
-              <div class="option-info">
-                <div class="option-label" data-i18n="decel.opt1.label">هبوط نظيف</div>
-                <div class="option-desc" data-i18n="decel.opt1.desc">بدون اهتزاز، شعرت بثبات كامل</div>
-              </div>
-              <div class="option-check"></div>
-            </button>
-            <button class="option-card" data-score="10">
-              <div class="option-icon">➖</div>
-              <div class="option-info">
-                <div class="option-label" data-i18n="decel.opt2.label">اهتزاز خفيف</div>
-                <div class="option-desc" data-i18n="decel.opt2.desc">هبطت لكن اهتززت، تعافيت بسرعة</div>
-              </div>
-              <div class="option-check"></div>
-            </button>
-            <button class="option-card" data-score="5">
-              <div class="option-icon">⚠️</div>
-              <div class="option-info">
-                <div class="option-label" data-i18n="decel.opt3.label">هبوط غير مستقر</div>
-                <div class="option-desc" data-i18n="decel.opt3.desc">اهتزاز ملحوظ، الكاحل شعر بعدم الثبات</div>
-              </div>
-              <div class="option-check"></div>
-            </button>
-            <button class="option-card" data-score="1">
-              <div class="option-icon">🔴</div>
-              <div class="option-info">
-                <div class="option-label" data-i18n="decel.opt4.label">لم أستطع الإكمال</div>
-                <div class="option-desc" data-i18n="decel.opt4.desc">لم أستطع تثبيت الهبوط أو شعرت بعدم الأمان</div>
-              </div>
-              <div class="option-check"></div>
-            </button>
-          </div>
-          <div style="text-align:center;margin-top:16px;">
-            <button class="btn-text" id="decelSkip" data-i18n="decel.skip">لا يوجد درج متاح — تخطي هذا الاختبار</button>
-          </div>
+    <div class="option-cards" data-question="side_hop">
+      <button class="option-card" data-score="15">
+        <div class="option-icon">✅</div>
+        <div class="option-info">
+          <div class="option-label">مكتمل بسلاسة</div>
+          <div class="option-desc">تحكم كامل، لا يوجد ألم</div>
         </div>
-      </div>
+      </button>
+      <button class="option-card" data-score="5">
+        <div class="option-icon">⚠️</div>
+        <div class="option-info">
+          <div class="option-label">عدم استقرار / تردد</div>
+          <div class="option-desc">أكملت الاختبار ولكن مع ألم خفيف أو اهتزاز</div>
+        </div>
+      </button>
+      <button class="option-card" data-score="1">
+        <div class="option-icon">🔴</div>
+        <div class="option-info">
+          <div class="option-label">لم أستطع الإكمال</div>
+          <div class="option-desc">بسبب الألم، الخوف، أو فقدان التوازن</div>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
 
       <div class="screen" id="screen-results" data-step="9">
         <div class="screen-content">
