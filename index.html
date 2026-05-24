@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="تقييم مجاني لثبات الكاحل للرياضيين. قيّم ثبات كاحلك، اكتشف المشاكل الخفية، واحصل على توصيات تعافي مخصصة. من Ankle 101.">
+  <title>تقييم ثبات الكاحل — Ankle 101</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <button class="lang-toggle" id="langToggle">
+    <span class="lang-toggle-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span> EN
+  </button>
+
+  <div class="app" id="app">
+
+    <div class="progress-container" id="progressContainer" style="display:none;">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <div class="progress-labels">
+        <span class="progress-phase" id="phaseLabel1" data-i18n="progress.phase1">المرحلة ١</span>
+        <span class="progress-phase" id="phaseLabel2" data-i18n="progress.phase2">المرحلة ٢</span>
+        <span class="progress-phase" id="phaseLabelR" data-i18n="progress.results">النتائج</span>
+      </div>
+    </div>
+
+    <div class="screens-container" id="screensContainer">
+
+      <div class="screen active" id="screen-welcome" data-step="0">
+        <div class="screen-content">
+          <div class="brand-header">
+            <img src="img/logo.png" alt="Behind the Injury" class="brand-logo animate-in">
+            <div class="welcome-badge animate-in animate-in-delay-1" data-i18n="welcome.badge">ANKLE ASSESSMENT</div>
+          </div>
+
+          <h1 class="welcome-title animate-in animate-in-delay-2" data-i18n="welcome.title">
+            هل كاحلك... ثابت <em>فعلاً؟</em>
+          </h1>
+
+          <p class="welcome-subtitle animate-in animate-in-delay-3" data-i18n="welcome.subtitle">
+            أداة فحص شاملة مصممة للرياضيين. اكتشف مشاكل الثبات الخفية، واختبر القدرة الوظيفية الحقيقية لكاحلك، واحصل على خطوات عملية لاستعادة ثقتك.
+          </p>
+
+          <div class="welcome-features animate-in animate-in-delay-4">
+            <div class="feature-item">
+              <div class="feature-icon">📋</div>
+              <div class="feature-text">
+                <strong data-i18n="welcome.feature1.title">الفحص الذاتي</strong>
+                <span data-i18n="welcome.feature1.desc">التاريخ المرضي، الثقة والجاهزية النفسية</span>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon">⚡</div>
+              <div class="feature-text">
+                <strong data-i18n="welcome.feature2.title">اختبارات الإجهاد البدني</strong>
+                <span data-i18n="welcome.feature2.desc">التوازن، التحمل وقدرة التباطؤ</span>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon">📊</div>
+              <div class="feature-text">
+                <strong data-i18n="welcome.feature3.title">نتائج مخصصة</strong>
+                <span data-i18n="welcome.feature3.desc">مستوى الثبات، خريطة العجز وخطوات عملية</span>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn-primary pulse animate-in animate-in-delay-5" id="startBtn" data-i18n="welcome.startBtn">
+            ابدأ التقييم
+          </button>
+          <p class="welcome-time animate-in animate-in-delay-5" data-i18n="welcome.time">يستغرق تقريباً ٥ دقائق</p>
+        </div>
+      </div>
+
+      <div class="screen" id="screen-sport" data-step="1">
+        <div class="screen-content">
+          <div class="phase-label" data-i18n="phase1.label">المرحلة ١ — تاريخ عدم الثبات</div>
+          <h2 class="question-text" data-i18n="sport.title">ما هي رياضتك؟</h2>
+          <p class="question-subtext" data-i18n="sport.subtitle">اختر الرياضة الرئيسية التي تمارسها.</p>
+
+          <div class="option-cards" data-question="sport">
+            <button class="option-card" data-score="1">
+              <div class="option-icon">⚽</div>
+              <div class="option-info">
+                <div class="option-label" data-i18n="sport.opt1.label">كرة القدم</div>
+              </div>
+              <div class="option-check"></div>
+            </button>
+            <button class="option-card" data-score="2">
+              <div class="option-icon">🏀</div>
+              <div class="option-info">
+                <div class="option-label" data-i18n="sport.opt2.label">كرة السلة</div>
+              </div>
+              <div class="option-check"></div>
+            </button>
+            <button class="option-card" data-score="3">
+              <div class="option-icon">🏐</div>
+              <div class="option-info">
+                <div class="option-label" data-i18n="sport.opt3.label">كرة الطائرة / كرة اليد</div>
+              </div>
+              <div class="option-check"></div>
+            </button>
+            <button class="option-card" data-score="4">
+              <div class="option-icon">🎾</div>
+              <div class="option-info">
+                <div class="option-label" data-i18n="sport.opt4.label">التنس / البادل</div>
+              </div>
+              <div class="option-check"></div>
+            </button>
+            <button class="option-card" data-score="5">
+              <div class="option-icon">🏃</div>
+              <div class="option-info">
+                <div class="option-label" data-i18n="sport.opt5.label">أخرى</div>
+              </div>
+              <div class="option-check"></div>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="screen" id="screen-q1" data-step="1">
+        <div class="screen-content">
+          <div class="phase-label" data-i18n="phase1.label">المرحلة ١ — تاريخ عدم الثبات</div>
+          <h2 class="question-text" data-i18n="q1.title">كم مرة التوى كاحلك؟</h2>
+          <p class="question-subtext" data-i18n="q1.subtitle">اشمل أي مرة انثنى أو التفّ أو انخلع بشكل ملحوظ.</p>
+
+          <div class="option-cards" data-question="sprain_count">
+            <button class="option-card" data-score="10">
+              <div class="option-icon">🛡️</div>
+              <div class="option-info">
+                <div class="option-label" data-i18n="q1.opt1.label">أبداً</div>
+                <div class="option-desc" data-i18n="q1.opt1.desc">لا يوجد تاريخ لالتواء الكاحل</div>
+              </div>
+              <div class="option-check"></div>
+            </button>
+            <button class="option-card" data-score="7">
+              <div class="option-icon">1️⃣</div>
+              <div class="option-info">
+                <div class="option-label" data-i18n="q1.opt2.label">مرة واحدة</div>
+                <div class="option-desc" data-i18n="q1.opt2.desc">حادثة منفردة واحدة</div>
+              </div>
+              <div class="option-check"></div>
+            </button>
+            <button class="option-card" data-score="4">
+              <div class="option-icon">⚠️</div>
+              <div class="option-info">
+                <div class="option-label" data-i18n="q1.opt3.label">٢–٣ مرات</div>
+                <div class="option-desc" data-i18n="q1.opt3.desc">التواءات متعددة على مر الوقت</div>
+              </div>
+              <div class="option-check"></div>
+            </button>
+            <button class="option-card" data-score="1">
+              <div class="option-icon">🔴</div>
+              <div class="option-info">
+                <div class="option-label" data-i18n="q1.opt4.label">٤ مرات أو أكثر</div>
+                <div class="option-desc" data-i18n="q1.opt4.desc">التواءات متكررة ومتتالية</div>
+              </div>
+              <div class="option-check"></div>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="screen" id="screen-q2" data-step="2">
+        <div class="screen-content">
+          <div class="phase-label" data-i18n="phase1.label">المرحلة ١ — تاريخ عدم الثبات</div>
+          <h2 class="question-text" data-i18n="q2.title">متى كانت آخر مرة التوى أو انخلع فيها كاحلك؟</h2>
+          <p class="question-subtext" data-i18n="q2.subtitle">فكّر في آخر مرة شعرت فيها بعدم ثبات كاحلك أو انثنى.</p>
+
+          <div class="option-cards" data-question="last_sprain">
+            <button class="option-card" data-score="10">
+              <div class="option-icon">✅</div>
+              <div class="option-info">
+                <div class="option-label" data-i18n="q2.opt1.label">أكثر من سنة</div>
+                <div class="option-desc" data-i18n="q2.opt1.desc">مضى أكثر من ١٢ شهراً على آخر حادثة</div>
+              </div>
+              <div class="option-check"></div>
+            </button>
+            <button class="option-card" data-score="7">
+              <div class="option-icon">📅</div>
+              <div class="option-info">
+                <div class="option-label" data-i18n="q2.opt2.label">٦–١٢ شهراً</div>
+                <div class="option-desc" data-i18n="q2.opt2.desc">خلال السنة الماضية</div>
+              </div>
+              <div class="option-check"></div>
+            </button>
+            <button class="option-card" data-score="4">
+              <div class="option-icon">⚠️</div>
+              <div class="option-info">
+                <div class="option-label" data-i18n="q2.opt3.label">١–٦ أشهر</div>
+                <div class="option-desc" data-i18n="q2.opt3.desc">حادثة حديثة نسبياً</div>
+              </div>
+              <div class="option-check"></div>
+            </button>
+            <button class="option-card" data-score="1">
+              <div class="option-icon">🔴</div>
+              <div class="option-info">
+                <div class="option-label" data-i18n="q2.opt4.label">خلال الشهر الماضي</div>
+                <div class="option-desc" data-i18n="q2.opt4.desc">حديث جداً — لا يزال في مرحلة التعافي</div>
+              </div>
+              <div class="option-check"></div>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="screen" id="screen-q3" data-step="3">
+        <div class="screen-content">
+          <div class="phase-label" data-i18n="phase1.label">المرحلة ١ — تاريخ عدم الثبات</div>
+          <h2 class="question-text" data-i18n="q3.title">كم مرة ينخلع كاحلك أو تشعر أنه قد ينثني؟</h2>
+          <p class="question-subtext" data-i18n="q3.subtitle">أثناء الرياضة، المشي على أرض غير مستوية، أو الأنشطة اليومية.</p>
+
+          <div class="option-cards" data-question="giving_way">
+            <button class="option-card" data-score="10">
+              <div class="option-icon">🛡️</div>
+              <div class="option-info">
+                <div class="option-label" data-i18n="q3.opt1.label">أبداً</div>
+                <div class="option-desc" data-i18n="q3.opt1.desc">يبدو ثابتاً تماماً في كل الأوقات</div>
+              </div>
+              <div class="option-check"></div>
+            </button>
+            <button class="option-card" data-score="7">
+              <div class="option-icon">📊</div>
+              <div class="option-info">
+                <div class="option-label" data-i18n="q3.opt2.label">نادراً</div>
+                <div class="option-desc" data-i18n="q3.opt2.desc">فقط في المواقف القصوى أو عند الإرهاق الشديد</div>
+              </div>
+              <div class="option-check"></div>
+            </button>
+            <button class="option-card" data-score="4">
+              <div class="option-icon">⚠️</div>
+              <div class="option-info">
+                <div class="option-label" data-i18n="q3.opt3.label">أحياناً</div>
+                <div class="option-desc" data-i18n="q3.opt3.desc">أثناء الرياضة أو على أرض غير مستوية</div>
+              </div>
+              <div class="option-check"></div>
+            </button>
+            <button class="option-card" data-score="1">
+              <div class="option-icon">🔴</div>
+              <div class="option-info">
+                <div class="option-label" data-i18n="q3.opt4.label">كثيراً</div>
+                <div class="option-desc" data-i18n="q3.opt4.desc">حتى أثناء الأنشطة اليومية العادية</div>
+              </div>
+              <div class="option-check"></div>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="screen" id="screen-confidence" data-step="4">
+        <div class="screen-content">
+          <div class="phase-label" data-i18n="confidence.label">المرحلة ١ — الثقة النفسية</div>
+
+          <div class="slider-questions">
+            <div class="slider-question">
+              <h2 class="slider-question-text" data-i18n="confidence.q1.title">ما مدى ثقتك في كاحلك أثناء تغيير الاتجاه، القفز، أو الهبوط؟</h2>
+              <p class="slider-subtext" data-i18n="confidence.q1.subtitle">فكّر في الحركات العالية الشدة وغير المتوقعة في رياضتك.</p>
+              <div class="slider-container">
+                <div class="slider-value-display">
+                  <div class="slider-value-number" id="confidenceValue">5</div>
+                  <div class="slider-value-label" id="confidenceLabel">ثقة متوسطة</div>
+                </div>
+                <input type="range" min="1" max="10" value="5" id="confidenceSlider">
+                <div class="slider-labels">
+                  <span data-i18n="confidence.slider.low">لا ثقة</span>
+                  <span data-i18n="confidence.slider.high">ثقة كاملة</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="slider-question">
+              <h2 class="slider-question-text" data-i18n="confidence.q2.title">ما مدى تأثير الخوف من الإصابة مجدداً على أدائك؟</h2>
+              <p class="slider-subtext" data-i18n="confidence.q2.subtitle">هل القلق بشأن كاحلك يعيقك أثناء التدريب أو المنافسة؟</p>
+              <div class="slider-container">
+                <div class="slider-value-display">
+                  <div class="slider-value-number" id="fearValue">5</div>
+                  <div class="slider-value-label" id="fearLabel">تأثير متوسط</div>
+                </div>
+                <input type="range" min="1" max="10" value="5" id="fearSlider">
+                <div class="slider-labels">
+                  <span data-i18n="confidence.fear.low">يعيقني باستمرار</span>
+                  <span data-i18n="confidence.fear.high">لا خوف على الإطلاق</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn-primary" id="confidenceNext" style="margin-top:32px;" data-i18n="confidence.next">متابعة</button>
+        </div>
+      </div>
+
+      <div class="screen" id="screen-phase2" data-step="5">
+        <div class="screen-content">
+          <div class="phase-transition">
+            <div class="phase-transition-icon">⚡</div>
+            <h2 data-i18n="phase2.transition.label">المرحلة ٢</h2>
+            <h3 data-i18n="phase2.transition.title">اختبارات الإجهاد البدني</h3>
+            <p data-i18n="phase2.transition.desc">الآن سنختبر القدرة الوظيفية الحقيقية لكاحلك. ستقوم بإجراء ٣ اختبارات بدنية سريعة لتقييم التوازن والتحمل والقوة الانفجارية.</p>
+            <button class="btn-primary" id="phase2Start" data-i18n="phase2.transition.start">ابدأ الاختبارات</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="screen" id="screen-balance" data-step="6">
+        <div class="screen-content">
+          <div class="phase-label" data-i18n="balance.label">المرحلة ٢ — التحكم بالتوازن</div>
+          <h2 class="question-text" data-i18n="balance.title">اختبار التوازن على رجل واحدة بعينين مغلقتين</h2>
+          <p class="test-purpose" data-i18n="balance.purpose">تقييم الحس العميق والتحكم العصبي العضلي.</p>
+
+          <div class="test-instructions">
+            <h4 data-i18n="balance.instructions.title">التعليمات</h4>
+            <ol>
+              <li data-i18n="balance.step1">قف على رجلك المصابة</li>
+              <li data-i18n="balance.step2">ارفع قدمك الأخرى عن الأرض</li>
+              <li data-i18n="balance.step3">أغمض عينيك وأبقِ ذراعيك مسترخيتين</li>
+              <li data-i18n="balance.step4">استمر أطول مدة ممكنة (حد أقصى ٣٠ ثانية)</li>
+              <li data-i18n="balance.step5">اضغط "فقدت توازني" عندما لا تستطيع الاستمرار</li>
+            </ol>
+          </div>
+
+          <div class="timer-display">
+            <div class="timer-ring-container">
+              <svg class="timer-ring" viewBox="0 0 200 200">
+                <circle class="timer-ring-bg" cx="100" cy="100" r="90"/>
+                <circle class="timer-ring-fill" id="timerRingFill" cx="100" cy="100" r="90"/>
+              </svg>
+              <div class="timer-text">
+                <div class="timer-value" id="timerValue">0.0</div>
+                <div class="timer-unit" data-i18n="balance.timer.unit">ثانية</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="timer-controls">
+            <button class="btn-primary" id="balanceStart" data-i18n="balance.start">ابدأ المؤقت</button>
+            <button class="btn-danger" id="balanceStop" style="display:none;" data-i18n="balance.stop">فقدت توازني</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="screen" id="screen-calfraise" data-step="7">
+        <div class="screen-content">
+          <div class="phase-label" data-i18n="calf.label">المرحلة ٢ — تحمل عضلة الساق</div>
+          <h2 class="question-text" data-i18n="calf.title">اختبار تحمل رفع الكعب على رجل واحدة</h2>
+          <p class="test-purpose" data-i18n="calf.purpose">قياس تحمل عضلات الساق وقدرة امتصاص القوة.</p>
+
+          <div class="test-instructions">
+            <h4 data-i18n="calf.instructions.title">التعليمات</h4>
+            <ol>
+              <li data-i18n="calf.step1">قف على رجلك المصابة بالقرب من حائط للاستناد الخفيف</li>
+              <li data-i18n="calf.step2">ارتفع على أصابع قدمك لأعلى ما يمكن</li>
+              <li data-i18n="calf.step3">انزل للأسفل بتحكم</li>
+              <li data-i18n="calf.step4">اضغط الزر أدناه لكل تكرار مكتمل</li>
+              <li data-i18n="calf.step5">توقف عندما لا تستطيع الوصول للارتفاع الكامل</li>
+            </ol>
+          </div>
+
+          <div class="counter-display">
+            <div class="counter-value" id="calfCount">0</div>
+            <div class="counter-label" data-i18n="calf.counter.label">تكرارات مكتملة</div>
+          </div>
+
+          <button class="btn-counter" id="calfCountBtn" data-i18n="calf.tapBtn">اضغط لكل تكرار</button>
+          <button class="btn-primary" id="calfDone" style="margin-top:16px;" data-i18n="calf.doneBtn">انتهيت — لا أستطيع المزيد</button>
+        </div>
+      </div>
+
+      <div class="screen" id="screen-sidehop" data-step="8">
+        <div class="screen-content">
+          <div class="phase-label" data-i18n="sidehop.label">المرحلة ٢ — القوة والانفجارية</div>
+          <h2 class="question-text" data-i18n="sidehop.title">اختبار القفز الجانبي</h2>
+          <p class="test-purpose" data-i18n="sidehop.purpose">تقييم القوة الانفجارية والتحكم الديناميكي والثبات أثناء الحركة المتكررة.</p>
+
+          <div class="test-instructions">
+            <h4 data-i18n="sidehop.instructions.title">التعليمات</h4>
+            <ol>
+              <li data-i18n="sidehop.step1">ضع شريطاً لاصقاً أو حدد خطاً على الأرض بعرض ٣٠ سم تقريباً</li>
+              <li data-i18n="sidehop.step2">قف على رجلك المصابة بجانب الخط</li>
+              <li data-i18n="sidehop.step3">اقفز جانبياً ذهاباً وإياباً فوق الخط بأسرع ما يمكن</li>
+              <li data-i18n="sidehop.step4">استمر لمدة ٣٠ ثانية مع الحفاظ على التحكم والتوازن</li>
+              <li data-i18n="sidehop.step5">ركز على الهبوط بخفة وثبات في كل قفزة</li>
+              <li data-i18n="sidehop.step6">قيّم تجربتك بصدق أدناه</li>
+            </ol>
+          </div>
+
+          <div class="option-cards" data-question="sidehop_result">
+            <button class="option-card" data-score="15">
+              <div class="option-icon">✅</div>
+              <div class="option-info">
+                <div class="option-label" data-i18n="sidehop.opt1.label">أكملت بسلاسة تامة</div>
+                <div class="option-desc" data-i18n="sidehop.opt1.desc">٣٠ ثانية كاملة بتحكم وإيقاع ثابت بدون ألم أو تردد</div>
+              </div>
+              <div class="option-check"></div>
+            </button>
+            <button class="option-card" data-score="10">
+              <div class="option-icon">➖</div>
+              <div class="option-info">
+                <div class="option-label" data-i18n="sidehop.opt2.label">أكملت مع انزعاج بسيط</div>
+                <div class="option-desc" data-i18n="sidehop.opt2.desc">أنهيت الـ ٣٠ ثانية لكن لاحظت عدم استقرار خفيف أو انزعاج بسيط قرب النهاية</div>
+              </div>
+              <div class="option-check"></div>
+            </button>
+            <button class="option-card" data-score="5">
+              <div class="option-icon">⚠️</div>
+              <div class="option-info">
+                <div class="option-label" data-i18n="sidehop.opt3.label">أكملت جزئياً</div>
+                <div class="option-desc" data-i18n="sidehop.opt3.desc">اضطررت للتبطيء بشكل ملحوظ أو التوقف مؤقتاً بسبب عدم الاستقرار أو الانزعاج</div>
+              </div>
+              <div class="option-check"></div>
+            </button>
+            <button class="option-card" data-score="2">
+              <div class="option-icon">🔴</div>
+              <div class="option-info">
+                <div class="option-label" data-i18n="sidehop.opt4.label">لم أستطع الإكمال</div>
+                <div class="option-desc" data-i18n="sidehop.opt4.desc">توقفت مبكراً بسبب الألم أو الخوف أو فقدان التوازن</div>
+              </div>
+              <div class="option-check"></div>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="screen" id="screen-email-gate" data-step="9">
+        <div class="screen-content">
+          <div class="email-gate">
+            <div class="email-gate-icon">📊</div>
+            <h2 class="email-gate-title" data-i18n="emailGate.title">نتائجك جاهزة تقريباً!</h2>
+            <p class="email-gate-desc" data-i18n="emailGate.desc">أدخل بريدك الإلكتروني لعرض تقرير تقييمك المفصل.</p>
+            <div class="email-gate-form">
+              <input type="email" id="gateEmailInput" data-i18n="emailGate.placeholder" placeholder="بريدك الإلكتروني" aria-label="Email address">
+              <p class="email-gate-error" id="gateEmailError" data-i18n="emailGate.error">يرجى إدخال بريد إلكتروني صالح</p>
+              <button class="btn-primary" id="gateEmailSubmit" data-i18n="emailGate.submit">عرض النتائج</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="screen" id="screen-results" data-step="9">
+        <div class="screen-content">
+
+          <div class="results-header">
+            <div class="welcome-badge" data-i18n="welcome.badge">ANKLE ASSESSMENT</div>
+            <h2 data-i18n="results.header">نتائج تقييمك</h2>
+          </div>
+
+          <div class="score-display">
+            <div class="score-ring-container">
+              <svg class="score-ring" viewBox="0 0 200 200">
+                <circle class="score-ring-bg" cx="100" cy="100" r="80"/>
+                <circle class="score-ring-fill" id="scoreRingFill" cx="100" cy="100" r="80"/>
+              </svg>
+              <div class="score-text">
+                <div class="score-number" id="scoreValue">0</div>
+                <div class="score-total" data-i18n="results.scoreTotal">/ ١٠٠</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tier-badge" id="tierBadge"></div>
+
+          <div class="acute-warning" id="acuteWarning" style="display:none;">
+            <div class="acute-warning-title" data-i18n="results.acuteWarning.title">⚠️ تنبيه مهم</div>
+            <p data-i18n="results.acuteWarning.text">
+              بناءً على إجاباتك، قد تكون إصابتك لا تزال في المرحلة الحادة.
+              ننصح بمراجعة أخصائي طب رياضي قبل البدء بأي برنامج تأهيل.
+              التوصيات أدناه لا تزال ذات صلة لكن يجب مناقشتها مع مقدم الرعاية الصحية أولاً.
+            </p>
+          </div>
+
+          <div class="chart-container">
+            <canvas id="radarChart"></canvas>
+          </div>
+
+          <div class="category-bars" id="categoryBars"></div>
+
+          <div class="insights-section" id="insightsSection">
+            <div class="insights-title" data-i18n="results.insights.title">🧠 ماذا يعني هذا</div>
+            <p class="insights-text" id="insightsText"></p>
+          </div>
+
+          <div class="action-steps" id="actionSteps">
+            <h3 class="action-steps-title" data-i18n="results.actionSteps.title">خطواتك القادمة</h3>
+            <div id="actionStepsList"></div>
+          </div>
+
+
+
+          <div class="cta-section">
+            <div class="cta-card">
+              <h3 data-i18n="results.cta.title">مستعد للنظام الكامل؟</h3>
+              <p id="ctaText"></p>
+              <a href="#" class="btn-cta" id="ctaButton" data-i18n="results.cta.button">احصل على النظام الكامل ←</a>
+            </div>
+          </div>
+
+          <div class="retake-container">
+            <button class="btn-text" id="retakeBtn" data-i18n="results.retake">إعادة التقييم</button>
+          </div>
+
+        </div>
+      </div>
+
+    </div></div><div class="calculating-overlay" id="calculatingOverlay">
+    <div class="calculating-spinner"></div>
+    <div class="calculating-text" data-i18n="calculating.text">جارٍ تحليل نتائجك…</div>
+  </div>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/scoring.js"></script>
+  <script src="js/timer.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
