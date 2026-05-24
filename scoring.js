@@ -27,7 +27,7 @@ const ScoringEngine = {
         { min: 0,  score: 2  }
       ]
     }
-    // side_hop is scored directly from the user's option selection
+    // decel_drop is scored directly from the user's option selection
   },
 
   // ------------------------------------------
@@ -92,10 +92,10 @@ const ScoringEngine = {
                              (answers.fear_reinjury       || 0);
     const balanceScore     = this.scorePhysicalTest('balance_hold', answers.balance_hold_raw || 0);
     const enduranceScore   = this.scorePhysicalTest('calf_raises',  answers.calf_raises_raw || 0);
-    const PowerScore = answers.side_hop || 0;
+    const decelerationScore = answers.decel_drop || 0;
 
     const total = historyScore + confidenceScore + balanceScore +
-                  enduranceScore + PowerScore;
+                  enduranceScore + decelerationScore;
 
     const pct = (score, max) => Math.round((score / max) * 100);
 
@@ -104,7 +104,7 @@ const ScoringEngine = {
       confidence:   { score: confidenceScore,   max: 20, percentage: pct(confidenceScore, 20),   label: I18n.t('cat.confidence') },
       balance:      { score: balanceScore,      max: 20, percentage: pct(balanceScore, 20),      label: I18n.t('cat.balance') },
       endurance:    { score: enduranceScore,    max: 15, percentage: pct(enduranceScore, 15),    label: I18n.t('cat.endurance') },
-      Power: { score: PowerScore, max: 15, percentage: pct(PowerScore, 15), label: I18n.t('cat.Power') }
+      deceleration: { score: decelerationScore, max: 15, percentage: pct(decelerationScore, 15), label: I18n.t('cat.deceleration') }
     };
 
     return {
