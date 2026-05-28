@@ -1,8 +1,8 @@
 // ============================================
-// Ankle 101 Assessment — Application Controller
-// Manages navigation, user input, timer / counter
-// interactions, score calculation, and results
-// rendering. Bilingual AR/EN via I18n.
+// Armor Protocol Assessment — Application Controller
+// Manages clinical gateway branching, core navigation, 
+// timer/counter mechanics, and results rendering.
+// Hardcoded for Egyptian Arabic / English mix.
 // ============================================
 
 (function () {
@@ -19,10 +19,10 @@
     results: null
   };
 
-  // Screen ids in step order
+  // Screen ids in core testing step order (Gateway screens handled separately)
   const SCREENS = [
     'screen-welcome',      // 0
-    'screen-sport',        // 1
+    'screen-sport',        // 1 (Green light drops users here)
     'screen-q1',           // 2
     'screen-q2',           // 3
     'screen-q3',           // 4
@@ -47,7 +47,7 @@
   const $$ = (sel) => document.querySelectorAll(sel);
 
   // ============================================
-  // Navigation
+  // Core Navigation (Main Test Flow)
   // ============================================
   function goToStep(step) {
     const prev = $(SCREENS[state.currentStep]);
@@ -62,9 +62,10 @@
 
     state.currentStep = step;
 
-    // Slide next screen in (slight delay for smoother chain)
+    // Slide next screen in
     if (next) {
       setTimeout(() => {
+        next.classList.remove('hidden'); // Safety catch
         next.classList.add('active');
         next.scrollTop = 0;
       }, 50);
@@ -72,7 +73,7 @@
 
     updateProgress();
 
-    // Show progress bar after welcome
+    // Show progress bar after entering the main test (Step 1)
     if (step > 0) $('progressContainer').style.display = 'block';
   }
 
@@ -106,6 +107,98 @@
   }
 
   // ============================================
+  // Clinical Gateway Flow (Armor Protocol)
+  // ============================================
+  function gateNavigate(currentId, nextId) {
+    const current = $(currentId);
+    const next = $(nextId);
+    
+    if (current) {
+      current.classList.remove('active');
+      current.classList.add('hidden');
+    }
+    if (next) {
+      next.classList.remove('hidden');
+      setTimeout(() => next.classList.add('active'), 50);
+    }
+  }
+
+  function setupClinicalGate() {
+    // Buttons & Inputs
+    const btnLegalNext = $('btn-legal-next');
+    const legalCheckbox = $('legal-checkbox');
+    const timelineRadios = document.querySelectorAll('input[name="timeline"]');
+    const btnTriageSubmit = $('btn-triage-submit');
+    const btnStartTests = $('btn-start-tests');
+
+    // Intercept initial Welcome Screen "Start" button
+    $('startBtn').addEventListener('click', () => {
+      // Hide welcome screen, trigger gateway[cite: 3]
+      gateNavigate('screen-welcome', 'screen-legal');
+    });
+
+    // Phase 1: Legal Gateway[cite: 3]
+    if (legalCheckbox) {
+      legalCheckbox.addEventListener('change', (e) => {
+        btnLegalNext.disabled = !e.target.checked;
+      });
+    }
+    
+    if (btnLegalNext) {
+      btnLegalNext.addEventListener('click', () => {
+        gateNavigate('screen-legal', 'screen-timeline');
+      });
+    }
+
+    // Phase 2: Timeline Filter
+    timelineRadios.forEach(radio => {
+      radio.addEventListener('change', (e) => {
+        const val = e.target.value;
+        if (val === 'acute') {
+          // < 1 Month -> Hard Stop
+          gateNavigate('screen-timeline', 'screen-hard-stop');
+        } else if (val === 'chronic') {
+          // > 3 Months -> Skip Triage, Green Light
+          gateNavigate('screen-timeline', 'screen-green-light');
+        } else if (val === 'sub-acute') {
+          // 1 to 3 Months -> Ask Triage Questions
+          gateNavigate('screen-timeline', 'screen-triage');
+        }
+      });
+    });
+
+    // Phase 3 & 4: Triage Submission Logic
+    if (btnTriageSubmit) {
+      btnTriageSubmit.addEventListener('click', () => {
+        const q1 = document.querySelector('input[name="q1"]:checked');
+        const q2 = document.querySelector('input[name="q2"]:checked');
+        const q3 = document.querySelector('input[name="q3"]:checked');
+
+        // Validation
+        if (!q1 || !q2 || !q3) {
+          alert("Please answer all questions before proceeding. / لازم تجاوب على كل الأسئلة الأول.");
+          return;
+        }
+
+        // Branching: Any "Yes" -> Hard Stop. All "No" -> Green Light.
+        if (q1.value === 'yes' || q2.value === 'yes' || q3.value === 'yes') {
+          gateNavigate('screen-triage', 'screen-hard-stop');
+        } else {
+          gateNavigate('screen-triage', 'screen-green-light');
+        }
+      });
+    }
+
+    // Green Light -> Drop user into actual Assessment Flow (Step 1: Sport Selection)
+    if (btnStartTests) {
+      btnStartTests.addEventListener('click', () => {
+        gateNavigate('screen-green-light', null); // Hide green light screen
+        goToStep(1); // Proceed to Phase 1 history[cite: 3]
+      });
+    }
+  }
+
+  // ============================================
   // Option-card questions
   // ============================================
   function setupOptionCards() {
@@ -124,7 +217,7 @@
       // Store
       state.answers[questionId] = score;
 
-      // Auto-advance (sidehop_result goes to email gate)
+      // Auto-advance (sidehop_result goes to email gate)[cite: 3]
       if (questionId === 'sidehop_result') {
         setTimeout(function() { goToStep(EMAIL_GATE); }, 450);
       } else {
@@ -134,23 +227,30 @@
   }
 
   // ============================================
-  // Confidence sliders
+  // Confidence sliders (Egyptian Arabic Hardcoded)
   // ============================================
   function setupSliders() {
     const confSlider = $('confidenceSlider');
     const fearSlider = $('fearSlider');
 
+    // Hardcoded Egyptian Arabic Labels
     function getConfLabel(v) {
-      return I18n.t('confidence.level.' + v);
+      if (v <= 3) return "مفيش ثقة خالص"; // No confidence
+      if (v <= 7) return "ثقة متوسطة";    // Moderate
+      return "ثقة كاملة";                 // Full confidence
     }
+    
     function getFearLabel(v) {
-      return I18n.t('fear.level.' + v);
+      if (v <= 3) return "مأثر عليا جداً"; // Affecting me a lot
+      if (v <= 7) return "تأثير متوسط";    // Moderate effect
+      return "مفيش خوف خالص";              // No fear at all
     }
 
     function sync(slider, numEl, labelEl, labelFn) {
       const v = parseInt(slider.value, 10);
       numEl.textContent   = v;
       labelEl.textContent = labelFn(v);
+      
       // Fill the track
       const pct = ((v - 1) / 9) * 100;
       slider.style.background =
@@ -162,7 +262,7 @@
     fearSlider.addEventListener('input', () =>
       sync(fearSlider, $('fearValue'), $('fearLabel'), getFearLabel));
 
-    // Init
+    // Init slider visuals
     sync(confSlider, $('confidenceValue'), $('confidenceLabel'), getConfLabel);
     sync(fearSlider, $('fearValue'), $('fearLabel'), getFearLabel);
 
@@ -225,7 +325,7 @@
     $('calfCountBtn').addEventListener('click', function (e) {
       state.counter.increment();
 
-      // Ripple
+      // Ripple effect
       const btn    = e.currentTarget;
       const rect   = btn.getBoundingClientRect();
       const size   = Math.max(rect.width, rect.height);
@@ -243,13 +343,6 @@
       state.answers.calf_raises_raw = state.counter.getCount();
       nextStep();
     });
-  }
-
-  // ============================================
-  // Side Hop Test (no skip needed)
-  // ============================================
-  function setupSideHopTest() {
-    // Side hop test uses option cards only — no special setup needed
   }
 
   // ============================================
@@ -274,10 +367,10 @@
   function renderResults() {
     const { total, categories, tier, isAcute } = state.results;
 
-    // ── Animated score ring ──
+    // ── Animated score ring ──[cite: 3]
     animateScore(total, tier);
 
-    // ── Tier badge ──
+    // ── Tier badge ──[cite: 3]
     $('tierBadge').innerHTML =
       '<div class="tier-badge-inner" style="background:' + tier.colorGlow +
       ';border:1px solid ' + tier.color +
@@ -285,10 +378,10 @@
       tier.emoji + ' ' + tier.label +
       ' <span class="tier-sublabel">— ' + tier.sublabel + '</span></div>';
 
-    // ── Acute warning ──
+    // ── Acute warning ──[cite: 3]
     if (isAcute) $('acuteWarning').style.display = 'block';
 
-    // ── Radar chart ──
+    // ── Radar chart ──[cite: 3]
     const chartData = [
       { label: categories.history.label,      value: categories.history.percentage },
       { label: categories.confidence.label,   value: categories.confidence.percentage },
@@ -304,13 +397,13 @@
       });
     }, 500);
 
-    // ── Category bars ──
+    // ── Category bars ──[cite: 3]
     renderCategoryBars(categories);
 
-    // ── Insights ──
+    // ── Insights ──[cite: 3]
     $('insightsText').textContent = ScoringEngine.getInsights(tier, categories);
 
-    // ── Action steps ──
+    // ── Action steps ──[cite: 3]
     var steps = ScoringEngine.getActionableSteps(tier);
     $('actionStepsList').innerHTML = steps.map(function (s, i) {
       return '<div class="action-step animate-in" style="animation-delay:' +
@@ -320,11 +413,11 @@
         '<p>' + s.description + '</p></div>';
     }).join('');
 
-    // ── CTA ──
+    // ── CTA ──[cite: 3]
     $('ctaText').textContent = ScoringEngine.getCTAText(tier);
   }
 
-  // ── Animated counter + ring fill ──
+  // ── Animated counter + ring fill ──[cite: 3]
   function animateScore(target, tier) {
     const el   = $('scoreValue');
     const ring = $('scoreRingFill');
@@ -352,7 +445,7 @@
     setTimeout(() => requestAnimationFrame(frame), 300);
   }
 
-  // ── Horizontal bar breakdown ──
+  // ── Horizontal bar breakdown ──[cite: 3]
   function renderCategoryBars(categories) {
     const order = ['history', 'confidence', 'balance', 'endurance', 'power'];
     var html = order.map(function (key, i) {
@@ -369,7 +462,7 @@
 
     $('categoryBars').innerHTML = html;
 
-    // Animate after DOM paint
+    // Animate after DOM paint[cite: 3]
     setTimeout(function () {
       order.forEach(function (key) {
         var bar = document.getElementById('bar-' + key);
@@ -385,40 +478,38 @@
 
   function setupEmailGate() {
     var errorEl = $('gateEmailError');
-    errorEl.style.display = 'none';
+    if(errorEl) errorEl.style.display = 'none';
 
-    $('gateEmailSubmit').addEventListener('click', function () {
-      var email = $('gateEmailInput').value.trim();
-      if (email && email.includes('@') && email.includes('.')) {
-        errorEl.style.display = 'none';
+    var submitBtn = $('gateEmailSubmit');
+    if(submitBtn) {
+      submitBtn.addEventListener('click', function () {
+        var email = $('gateEmailInput').value.trim();
+        if (email && email.includes('@') && email.includes('.')) {
+          errorEl.style.display = 'none';
 
-        // Pre-calculate results so we can send score + tier with the email
-        var preResults = ScoringEngine.calculate(state.answers);
+          // Pre-calculate results[cite: 3]
+          var preResults = ScoringEngine.calculate(state.answers);
 
-        // Send to Google Sheets via GET (reliable, no CORS issues)
-        try {
-          var params = '?email=' + encodeURIComponent(email) +
-                       '&score=' + encodeURIComponent(preResults.total) +
-                       '&tier='  + encodeURIComponent(preResults.tier.id);
-          fetch(SHEETS_ENDPOINT + params, { mode: 'no-cors' });
-        } catch (_) { /* silently fail — don't block the user */ }
+          // Send to Google Sheets via GET (reliable, no CORS issues)[cite: 3]
+          try {
+            var params = '?email=' + encodeURIComponent(email) +
+                         '&score=' + encodeURIComponent(preResults.total) +
+                         '&tier='  + encodeURIComponent(preResults.tier.id);
+            fetch(SHEETS_ENDPOINT + params, { mode: 'no-cors' });
+          } catch (_) { /* silently fail — don't block the user */ }
 
-        // Persist email locally as backup
-        try {
-          localStorage.setItem('ankle101_email', email);
-        } catch (_) {}
-
-        showCalculating();
-      } else {
-        errorEl.style.display = 'block';
-        $('gateEmailInput').style.borderColor = 'var(--color-danger)';
-        setTimeout(function () { $('gateEmailInput').style.borderColor = ''; }, 2000);
-      }
-    });
+          showCalculating();
+        } else {
+          errorEl.style.display = 'block';
+          $('gateEmailInput').style.borderColor = 'var(--color-danger)';
+          setTimeout(function () { $('gateEmailInput').style.borderColor = ''; }, 2000);
+        }
+      });
+    }
   }
 
   // ============================================
-  // Retake
+  // Retake Logic
   // ============================================
   function setupRetake() {
     $('retakeBtn').addEventListener('click', function () {
@@ -428,7 +519,7 @@
       if (state.timer)   state.timer.reset();
       if (state.counter) state.counter.reset();
 
-      // Reset visual state
+      // Reset visual state[cite: 3]
       $$('.option-card.selected').forEach(function (c) { c.classList.remove('selected'); });
       $('confidenceSlider').value = 5;
       $('fearSlider').value       = 5;
@@ -438,76 +529,56 @@
       $('balanceStop').style.display  = 'none';
       $('progressContainer').style.display = 'none';
       $('gateEmailInput').value = '';
-      $('gateEmailError').style.display = 'none';
-      $('acuteWarning').style.display = 'none';
+      if($('gateEmailError')) $('gateEmailError').style.display = 'none';
+      if($('acuteWarning')) $('acuteWarning').style.display = 'none';
 
-      // Reset timer ring
+      // Reset timer ring[cite: 3]
       var circ = 2 * Math.PI * 90;
       $('timerRingFill').style.strokeDashoffset = circ;
 
-      // Remove all active screens, show welcome
-      $$('.screen').forEach(function (s) { s.classList.remove('active', 'exit-left'); });
+      // Uncheck Gate Radios & Checkboxes
+      const legalCheckbox = $('legal-checkbox');
+      if (legalCheckbox) legalCheckbox.checked = false;
+      if ($('btn-legal-next')) $('btn-legal-next').disabled = true;
+      $$('input[type="radio"]').forEach(r => r.checked = false);
+
+      // Hide all standard AND gateway screens[cite: 3]
+      $$('.screen').forEach(function (s) { 
+        s.classList.remove('active', 'exit-left'); 
+        if(s.id !== 'screen-welcome') {
+          s.classList.add('hidden'); // Ensure gateways stay hidden
+        }
+      });
+      
+      // Show Welcome[cite: 3]
+      $('screen-welcome').classList.remove('hidden');
       $('screen-welcome').classList.add('active');
 
-      // Re-init slider visuals
+      // Re-init slider visuals[cite: 3]
       setupSliders();
     });
-  }
-
-  // ============================================
-  // Language Toggle
-  // ============================================
-  function setupLangToggle() {
-    $('langToggle').addEventListener('click', function () {
-      var newLang = I18n.currentLang === 'ar' ? 'en' : 'ar';
-      I18n.setLang(newLang);
-
-      // Re-sync slider labels to new language
-      syncSlidersToCurrentLang();
-
-      // If results are currently visible, re-render them
-      if (state.currentStep === RESULTS_STEP && state.results) {
-        // Recalculate with new language labels
-        state.results = ScoringEngine.calculate(state.answers);
-        renderResults();
-      }
-    });
-  }
-
-  function syncSlidersToCurrentLang() {
-    var confSlider = $('confidenceSlider');
-    var fearSlider = $('fearSlider');
-    if (confSlider && fearSlider) {
-      var cv = parseInt(confSlider.value, 10);
-      var fv = parseInt(fearSlider.value, 10);
-      $('confidenceLabel').textContent = I18n.t('confidence.level.' + cv);
-      $('fearLabel').textContent       = I18n.t('fear.level.' + fv);
-    }
   }
 
   // ============================================
   // Init
   // ============================================
   function init() {
-    // Initialize i18n first
-    I18n.init();
-
-    $('startBtn').addEventListener('click', nextStep);
+    setupClinicalGate(); // Initialize the new branching logic
+    
+    // Original Event Listeners[cite: 3]
     $('phase2Start').addEventListener('click', nextStep);
 
     setupOptionCards();
     setupSliders();
     setupBalanceTest();
     setupCalfTest();
-    setupSideHopTest();
     setupEmailGate();
     setupRetake();
-    setupLangToggle();
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
+    document.addEventListener('DOMContentLoaded', init); //[cite: 3]
   } else {
-    init();
+    init(); //[cite: 3]
   }
 })();
