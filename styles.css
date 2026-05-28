@@ -149,14 +149,14 @@ body::before{
 .progress-phase.completed{color:var(--text-secondary)}
 
 /* ============================================
-   Screen System
+   Screen System & Transitions
    ============================================ */
 .screens-container{
   flex:1;position:relative;overflow:hidden;
 }
 .screen{
   position:absolute;inset:0;
-  display:flex;align-items:flex-start;justify-content:center;
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
   opacity:0;transform:translateX(60px);
   pointer-events:none;
   transition:opacity var(--t-screen), transform var(--t-screen);
@@ -171,6 +171,14 @@ body::before{
   opacity:0;transform:translateX(-60px);
 }
 .screen-content{width:100%;max-width:520px}
+
+/* Dynamic JS Flow class (Armor Protocol) */
+.screen.hidden {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  display: none !important;
+}
 
 /* ============================================
    Welcome Screen
@@ -244,6 +252,196 @@ body::before{
 }
 
 /* ============================================
+   Armor Protocol: Clinical Gateway Elements
+   (Upgraded Premium UI)
+   ============================================ */
+
+/* --- Phase 1: Disclaimer & Custom Checkbox --- */
+.disclaimer-box {
+  background: rgba(245, 158, 11, 0.05);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  border-left: 4px solid var(--color-warning); /* LTR fallback, overridden in RTL section */
+  padding: var(--sp-lg);
+  border-radius: var(--r-md);
+  margin-bottom: var(--sp-3xl); /* Massive space to push the button down */
+  width: 100%;
+}
+.warning-text {
+  color: var(--color-warning);
+  font-family: var(--font-body);
+  margin-bottom: var(--sp-md);
+}
+.checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-md);
+  cursor: pointer;
+  font-family: var(--font-body);
+}
+.checkbox-text {
+  font-size: 15px;
+  color: var(--text-primary);
+  line-height: 1.7;
+}
+/* Hide Native Checkbox */
+.checkbox-label input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+/* Custom Premium Checkbox */
+.custom-checkbox {
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  background: var(--bg-secondary);
+  border: 2px solid var(--border-default);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--t-default);
+  margin-top: 2px; /* Aligns visually with the first line of text */
+}
+.checkbox-label:hover .custom-checkbox {
+  border-color: var(--accent);
+}
+/* Active Checkbox State using :has() */
+.checkbox-label:has(input:checked) .custom-checkbox {
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow: var(--shadow-glow);
+}
+.checkbox-label:has(input:checked) .custom-checkbox::after {
+  content: '✓';
+  color: var(--bg-primary);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* --- Phase 2: Hidden Radios for Option Cards --- */
+.hidden-radio {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+/* Apply glowing states to label cards when hidden radio is checked */
+.radio-label-card:has(input:checked) {
+  border-color: var(--accent);
+  background: var(--bg-card-active);
+  box-shadow: var(--shadow-glow);
+}
+.radio-label-card:has(input:checked) .option-icon {
+  background: var(--accent-glow);
+}
+.radio-label-card:has(input:checked) .radio-check {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+.radio-label-card:has(input:checked) .radio-check::after {
+  content: '✓';
+  color: var(--bg-primary);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* --- Phase 3: Premium Triage Toggle Buttons --- */
+.triage-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-lg);
+  width: 100%;
+}
+.triage-question-block {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--r-lg);
+  padding: var(--sp-lg);
+}
+.triage-q-title {
+  font-family: var(--font-heading);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--sp-md);
+  line-height: 1.5;
+}
+.triage-options {
+  display: flex;
+  gap: var(--sp-md);
+}
+.triage-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-md);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--r-md);
+  cursor: pointer;
+  transition: all var(--t-default);
+  color: var(--text-secondary);
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 700;
+}
+.triage-btn:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--text-muted);
+  color: var(--text-primary);
+}
+/* Yes gets Danger styling */
+.triage-btn:has(input[value="yes"]:checked) {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+  box-shadow: 0 0 15px rgba(239, 68, 68, 0.15);
+}
+/* No gets Success styling */
+.triage-btn:has(input[value="no"]:checked) {
+  background: rgba(34, 197, 94, 0.1);
+  border-color: var(--color-success);
+  color: var(--color-success);
+  box-shadow: 0 0 15px rgba(34, 197, 94, 0.15);
+}
+
+/* Hard Stop & Clearance Visuals */
+.stop-icon, .go-icon {
+  font-size: 64px;
+  text-align: center;
+  margin-bottom: var(--sp-lg);
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+.first-aid-guide {
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: var(--r-lg);
+  padding: var(--sp-lg);
+  margin-top: var(--sp-xl);
+  width: 100%;
+}
+.first-aid-guide h3 {
+  color: var(--color-danger);
+  margin-bottom: var(--sp-md);
+  font-family: var(--font-heading);
+}
+.first-aid-guide ul {
+  list-style: none;
+  padding-left: 0;
+}
+.first-aid-guide li {
+  margin-bottom: var(--sp-sm);
+  color: var(--text-secondary);
+  font-size: 14px;
+  position: relative;
+  line-height: 1.6;
+}
+
+
+/* ============================================
    Phase Label
    ============================================ */
 .phase-label{
@@ -272,7 +470,7 @@ body::before{
 }
 
 /* ============================================
-   Option Cards
+   Option Cards (Original)
    ============================================ */
 .option-cards{
   display:flex;flex-direction:column;gap:var(--sp-md);
@@ -319,7 +517,7 @@ body::before{
 .option-label{font-weight:600;font-size:16px;margin-bottom:2px}
 .option-desc{font-size:13px;color:var(--text-secondary)}
 
-.option-check{
+.option-check, .radio-check{
   width:24px;height:24px;border-radius:var(--r-full);
   border:2px solid var(--border-default);
   display:flex;align-items:center;justify-content:center;
@@ -425,6 +623,7 @@ input[type="range"]::-moz-range-thumb{
   background:var(--bg-card);border:1px solid var(--border-subtle);
   border-radius:var(--r-lg);padding:var(--sp-lg);
   margin-bottom:var(--sp-2xl);
+  width: 100%;
 }
 .test-instructions h4{
   font-size:12px;text-transform:uppercase;letter-spacing:1.5px;
@@ -533,6 +732,16 @@ input[type="range"]::-moz-range-thumb{
 @keyframes btn-pulse{
   0%,100%{box-shadow:0 0 0 0 rgba(255,107,0,0.4)}
   50%{box-shadow:0 0 0 12px rgba(255,107,0,0)}
+}
+
+/* Gateway button disabled state */
+.btn-primary:disabled {
+  background: var(--bg-secondary);
+  color: var(--text-muted);
+  cursor: not-allowed;
+  box-shadow: none;
+  opacity: 0.6;
+  transform: translateY(0);
 }
 
 .btn-danger{
@@ -904,6 +1113,27 @@ input[type="range"]::-moz-range-thumb{
 }
 [dir="rtl"] .screen.exit-left{
   transform:translateX(60px);
+}
+
+/* Gateway specific RTL logic */
+[dir="rtl"] .disclaimer-box {
+  border-left: none;
+  border-right: 4px solid var(--color-warning);
+}
+[dir="rtl"] .triage-question label {
+  margin-right: 0;
+  margin-left: var(--sp-xl);
+}
+[dir="rtl"] .first-aid-guide li {
+  padding-left: 0;
+  padding-right: var(--sp-lg);
+}
+[dir="rtl"] .first-aid-guide li::before {
+  left: auto;
+  right: 0;
+}
+[dir="rtl"] .first-aid-guide {
+  text-align: right;
 }
 
 /* Phase label — flip the dash marker */
