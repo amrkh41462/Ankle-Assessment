@@ -133,11 +133,11 @@
 
     // Intercept initial Welcome Screen "Start" button
     $('startBtn').addEventListener('click', () => {
-      // Hide welcome screen, trigger gateway[cite: 3]
+      // Hide welcome screen, trigger gateway
       gateNavigate('screen-welcome', 'screen-legal');
     });
 
-    // Phase 1: Legal Gateway[cite: 3]
+    // Phase 1: Legal Gateway
     if (legalCheckbox) {
       legalCheckbox.addEventListener('change', (e) => {
         btnLegalNext.disabled = !e.target.checked;
@@ -193,7 +193,7 @@
     if (btnStartTests) {
       btnStartTests.addEventListener('click', () => {
         gateNavigate('screen-green-light', null); // Hide green light screen
-        goToStep(1); // Proceed to Phase 1 history[cite: 3]
+        goToStep(1); // Proceed to Phase 1 history
       });
     }
   }
@@ -206,8 +206,15 @@
       const card = e.target.closest('.option-card');
       if (!card) return;
 
+      // FIX: Prevent Gateway timeline cards from triggering the main test auto-advance
+      if (card.classList.contains('radio-label-card')) return;
+
       const container  = card.closest('.option-cards');
+      if (!container) return;
+      
       const questionId = container.dataset.question;
+      if (!questionId) return;
+
       const score      = parseInt(card.dataset.score, 10);
 
       // Select
@@ -217,7 +224,7 @@
       // Store
       state.answers[questionId] = score;
 
-      // Auto-advance (sidehop_result goes to email gate)[cite: 3]
+      // Auto-advance (sidehop_result goes to email gate)
       if (questionId === 'sidehop_result') {
         setTimeout(function() { goToStep(EMAIL_GATE); }, 450);
       } else {
@@ -367,10 +374,10 @@
   function renderResults() {
     const { total, categories, tier, isAcute } = state.results;
 
-    // ── Animated score ring ──[cite: 3]
+    // ── Animated score ring ──
     animateScore(total, tier);
 
-    // ── Tier badge ──[cite: 3]
+    // ── Tier badge ──
     $('tierBadge').innerHTML =
       '<div class="tier-badge-inner" style="background:' + tier.colorGlow +
       ';border:1px solid ' + tier.color +
@@ -378,10 +385,10 @@
       tier.emoji + ' ' + tier.label +
       ' <span class="tier-sublabel">— ' + tier.sublabel + '</span></div>';
 
-    // ── Acute warning ──[cite: 3]
+    // ── Acute warning ──
     if (isAcute) $('acuteWarning').style.display = 'block';
 
-    // ── Radar chart ──[cite: 3]
+    // ── Radar chart ──
     const chartData = [
       { label: categories.history.label,      value: categories.history.percentage },
       { label: categories.confidence.label,   value: categories.confidence.percentage },
@@ -397,13 +404,13 @@
       });
     }, 500);
 
-    // ── Category bars ──[cite: 3]
+    // ── Category bars ──
     renderCategoryBars(categories);
 
-    // ── Insights ──[cite: 3]
+    // ── Insights ──
     $('insightsText').textContent = ScoringEngine.getInsights(tier, categories);
 
-    // ── Action steps ──[cite: 3]
+    // ── Action steps ──
     var steps = ScoringEngine.getActionableSteps(tier);
     $('actionStepsList').innerHTML = steps.map(function (s, i) {
       return '<div class="action-step animate-in" style="animation-delay:' +
@@ -413,11 +420,11 @@
         '<p>' + s.description + '</p></div>';
     }).join('');
 
-    // ── CTA ──[cite: 3]
+    // ── CTA ──
     $('ctaText').textContent = ScoringEngine.getCTAText(tier);
   }
 
-  // ── Animated counter + ring fill ──[cite: 3]
+  // ── Animated counter + ring fill ──
   function animateScore(target, tier) {
     const el   = $('scoreValue');
     const ring = $('scoreRingFill');
@@ -445,7 +452,7 @@
     setTimeout(() => requestAnimationFrame(frame), 300);
   }
 
-  // ── Horizontal bar breakdown ──[cite: 3]
+  // ── Horizontal bar breakdown ──
   function renderCategoryBars(categories) {
     const order = ['history', 'confidence', 'balance', 'endurance', 'power'];
     var html = order.map(function (key, i) {
@@ -462,7 +469,7 @@
 
     $('categoryBars').innerHTML = html;
 
-    // Animate after DOM paint[cite: 3]
+    // Animate after DOM paint
     setTimeout(function () {
       order.forEach(function (key) {
         var bar = document.getElementById('bar-' + key);
@@ -487,10 +494,10 @@
         if (email && email.includes('@') && email.includes('.')) {
           errorEl.style.display = 'none';
 
-          // Pre-calculate results[cite: 3]
+          // Pre-calculate results
           var preResults = ScoringEngine.calculate(state.answers);
 
-          // Send to Google Sheets via GET (reliable, no CORS issues)[cite: 3]
+          // Send to Google Sheets via GET (reliable, no CORS issues)
           try {
             var params = '?email=' + encodeURIComponent(email) +
                          '&score=' + encodeURIComponent(preResults.total) +
@@ -519,7 +526,7 @@
       if (state.timer)   state.timer.reset();
       if (state.counter) state.counter.reset();
 
-      // Reset visual state[cite: 3]
+      // Reset visual state
       $$('.option-card.selected').forEach(function (c) { c.classList.remove('selected'); });
       $('confidenceSlider').value = 5;
       $('fearSlider').value       = 5;
@@ -532,7 +539,7 @@
       if($('gateEmailError')) $('gateEmailError').style.display = 'none';
       if($('acuteWarning')) $('acuteWarning').style.display = 'none';
 
-      // Reset timer ring[cite: 3]
+      // Reset timer ring
       var circ = 2 * Math.PI * 90;
       $('timerRingFill').style.strokeDashoffset = circ;
 
@@ -542,7 +549,7 @@
       if ($('btn-legal-next')) $('btn-legal-next').disabled = true;
       $$('input[type="radio"]').forEach(r => r.checked = false);
 
-      // Hide all standard AND gateway screens[cite: 3]
+      // Hide all standard AND gateway screens
       $$('.screen').forEach(function (s) { 
         s.classList.remove('active', 'exit-left'); 
         if(s.id !== 'screen-welcome') {
@@ -550,11 +557,11 @@
         }
       });
       
-      // Show Welcome[cite: 3]
+      // Show Welcome
       $('screen-welcome').classList.remove('hidden');
       $('screen-welcome').classList.add('active');
 
-      // Re-init slider visuals[cite: 3]
+      // Re-init slider visuals
       setupSliders();
     });
   }
@@ -565,7 +572,7 @@
   function init() {
     setupClinicalGate(); // Initialize the new branching logic
     
-    // Original Event Listeners[cite: 3]
+    // Original Event Listeners
     $('phase2Start').addEventListener('click', nextStep);
 
     setupOptionCards();
@@ -577,8 +584,8 @@
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init); //[cite: 3]
+    document.addEventListener('DOMContentLoaded', init);
   } else {
-    init(); //[cite: 3]
+    init();
   }
 })();
